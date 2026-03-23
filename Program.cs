@@ -16,9 +16,9 @@ menu.Run();
 
 static void SeedData(IAirportService airportService)
 {
-    airportService.AddPassenger(1, "Иван Иванов", "MP123456");
-    airportService.AddPassenger(2, "Мария Смирнова", "MP789012");
-    airportService.AddPassenger(3, "Алексей Петров", "MP345678");
+    airportService.AddPassenger(1, "Иван Иванов", "1234123456");
+    airportService.AddPassenger(2, "Мария Смирнова", "4152789012");
+    airportService.AddPassenger(3, "Алексей Петров", "3456789012");
 
     airportService.AddFlight(1, "Лондон", DateTime.Now.AddDays(2), 45000m, 150);
     airportService.AddFlight(2, "Париж", DateTime.Now.AddDays(3), 38000m, 120);

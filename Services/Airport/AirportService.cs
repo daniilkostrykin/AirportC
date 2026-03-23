@@ -27,13 +27,22 @@ public class AirportService : IAirportService {
 
     public IReadOnlyList<Flight> GetAllFlights() => _flightRepo.GetAll();
 
-    public IEnumerable<FlightStatResult> GetRevenueReport() {
-        return _ticketRepo.GetAll()
-            .GroupBy(t => t.FlightId)
-            .Select(g => {
-                var f = _flightRepo.GetById(g.Key);
-                return new FlightStatResult { Destination = f?.Destination ?? "?", TicketsSold = g.Count(), TotalRevenue = g.Sum(t => t.PricePaid) };
-            });
+    public IEnumerable<FlightStatResult> GetRevenueReport() 
+        {
+            var destinationMap = _flightRepo.GetAll().ToDictionary(f => f.Id, f => f.Destination);
+
+            return _ticketRepo.GetAll()
+                .GroupBy(t => t.FlightId)
+                .Select(g => 
+                {
+                    var dest = destinationMap.TryGetValue(g.Key, out var d) ? d : "Неизвестно";
+                    
+                    return new FlightStatResult { 
+                        Destination = dest, 
+                        TicketsSold = g.Count(), 
+                        TotalRevenue = g.Sum(t => t.PricePaid) 
+                    };
+                });
     }
 
     public IEnumerable<FlightStatResult> GetTopProfitableFlights(int count = 3) {
